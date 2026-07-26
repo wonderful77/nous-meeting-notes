@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "議記錄 — NOUS 語音自動會議記錄工具",
+  "description": "會議記錄 — NOUS 語音自動會議記錄工具",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

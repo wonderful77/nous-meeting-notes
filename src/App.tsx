@@ -7,6 +7,7 @@ import type {
   Phase,
 } from "./types";
 import { Logo } from "./components/Logo";
+import { Hero } from "./components/Hero";
 import { Settings } from "./components/Settings";
 import { MetaForm } from "./components/MetaForm";
 import { Uploader } from "./components/Uploader";
@@ -206,7 +207,7 @@ export default function App() {
             <Logo size={38} />
             <div>
               <h1 className="font-serif text-lg leading-none text-silver-100">
-                議記錄
+                會議記錄
               </h1>
               <p className="mt-1 text-[11px] uppercase tracking-[0.28em] text-silver-500">
                 NOUS · Meeting Minutes
@@ -235,18 +236,12 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-5">
-        {/* Hero */}
-        <section className="animate-fade-up py-10 text-center">
-          <h2 className="font-serif text-3xl text-silver-100 sm:text-4xl">
-            導入語音，自動生成公版會議記錄
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-silver-400">
-            上傳會議錄音，Whisper 轉錄逐字稿、Claude 依 NOUS 整理原則去蕪存菁，
-            一鍵匯出 <span className="text-silver-200">.docx</span> 公版會議記錄。
-          </p>
-        </section>
+      {/* 主視覺 */}
+      <div className="mx-auto max-w-5xl px-5 pt-8">
+        <Hero />
+      </div>
 
+      <main className="mx-auto max-w-4xl px-5 pt-8">
         <div className="space-y-6">
           {/* 1. 會議資料 */}
           <Card step="01" title="會議資料">
@@ -357,12 +352,14 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <section className="glass animate-fade-up rounded-3xl p-6 shadow-glow sm:p-8">
-      <div className="mb-6 flex items-baseline gap-3">
-        <span className="font-mono text-xs text-accent/70">{step}</span>
+    <section className="glass animate-fade-up relative rounded-[22px] p-6 shadow-glow sm:p-8">
+      <span className="plus-mark absolute right-5 top-5">＋</span>
+      <div className="mb-5 flex items-baseline gap-3">
+        <span className="spec text-accent/80">{step}</span>
         <h3 className="font-serif text-xl text-silver-100">{title}</h3>
         {hint && <span className="text-xs text-silver-500">{hint}</span>}
       </div>
+      <div className="hairline mb-6" />
       {children}
     </section>
   );
