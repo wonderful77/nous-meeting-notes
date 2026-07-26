@@ -20,14 +20,25 @@ npm install
 npm run dev
 ```
 
-## 建置與部署（GitHub Pages）
+## 建置
 
 ```bash
 npm run build      # 產出 dist/
-npm run deploy     # 以 gh-pages 推到 gh-pages 分支
 ```
 
-`vite.config.ts` 的 `base: "./"` 使用相對路徑，適用 GitHub Pages 專案頁子路徑。
+`vite.config.ts` 的 `base: "./"` 使用相對路徑，適用任何靜態託管的根目錄或子路徑。
+
+## 部署（私有倉庫）
+
+GitHub Pages 免費方案不支援私有倉庫，故改用支援私有 repo 的免費靜態平台。倉庫已附好設定檔，於平台網頁「Import / Add project」選此 repo 即會自動偵測：
+
+- **Vercel**：`vercel.json`（framework: vite，build `npm run build`，output `dist`）。
+- **Netlify**：`netlify.toml`（build `npm run build`，publish `dist`）。
+- **Cloudflare Pages**：build command `npm run build`，output directory `dist`。
+
+首次需在平台授權 GitHub App 存取此私有倉庫；之後每次 push 到 `main` 會自動重新部署。
+
+> 若日後改為公開倉庫，也可用 `npm run deploy` 以 `gh-pages` 分支發佈到 GitHub Pages。
 
 ## 設定
 
