@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-ink-950 text-silver-200 font-sans antialiased;
+    background-image:
+      radial-gradient(1200px 600px at 80% -10%, rgba(201, 204, 212, 0.06), transparent 60%),
+      radial-gradient(900px 500px at 0% 110%, rgba(114, 122, 139, 0.08), transparent 55%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgba(201, 204, 212, 0.25);
+  }
+
+  /* 隱藏 number input 的上下箭頭，維持乾淨版面 */
+  input[type="time"]::-webkit-calendar-picker-indicator,
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-ink-900/70 border border-white/[0.06] backdrop-blur-xl;
+  }
+
+  .field-label {
+    @apply mb-2 block text-xs font-medium uppercase tracking-[0.18em] text-silver-500;
+  }
+
+  .field-input {
+    @apply w-full rounded-xl border border-white/[0.08] bg-ink-800/80 px-4 py-3 text-[15px] text-silver-100
+      outline-none transition-all duration-200 placeholder:text-silver-500/60
+      focus:border-accent/40 focus:bg-ink-800 focus:shadow-[0_0_0_3px_rgba(201,204,212,0.08)];
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium
+      transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply btn bg-gradient-to-b from-silver-100 to-silver-300 text-ink-950
+      hover:from-white hover:to-silver-200 hover:shadow-[0_12px_30px_-8px_rgba(201,204,212,0.4)]
+      active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn border border-white/[0.1] bg-white/[0.02] text-silver-200
+      hover:border-white/20 hover:bg-white/[0.05];
+  }
+
+  .chip {
+    @apply inline-flex cursor-pointer select-none items-center gap-1.5 rounded-full border px-3.5 py-1.5
+      text-sm transition-all duration-150;
+  }
+
+  .chip-on {
+    @apply border-accent/50 bg-accent/15 text-silver-100 shadow-[0_0_0_1px_rgba(201,204,212,0.15)_inset];
+  }
+
+  .chip-off {
+    @apply border-white/[0.08] bg-white/[0.02] text-silver-400 hover:border-white/20 hover:text-silver-200;
+  }
+}
+
+/* 細緻捲軸 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 204, 212, 0.15) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(201, 204, 212, 0.15);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 204, 212, 0.3);
+}
