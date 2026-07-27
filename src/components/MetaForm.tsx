@@ -61,8 +61,8 @@ export function MetaForm({ meta, onChange }: Props) {
                 onClick={() => set("meetingType", val)}
                 className={`rounded-xl border px-4 py-3 text-sm font-medium transition-all ${
                   on
-                    ? "border-accent/50 bg-accent/15 text-silver-100 shadow-[0_0_0_1px_rgba(201,204,212,0.15)_inset]"
-                    : "border-white/[0.08] bg-white/[0.02] text-silver-400 hover:border-white/20"
+                    ? "border-transparent bg-silver-100 text-ink-950 shadow-[0_8px_20px_-10px_rgba(22,24,29,0.5)]"
+                    : "border-black/[0.12] bg-black/[0.02] text-silver-400 hover:border-black/25"
                 }`}
               >
                 {label}

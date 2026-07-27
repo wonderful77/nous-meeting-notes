@@ -35,11 +35,11 @@ export function Uploader({ items, onAdd, onRemove }: Props) {
         }}
         className={`group flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-10 text-center transition-all ${
           dragging
-            ? "border-accent/60 bg-accent/10"
-            : "border-white/[0.1] bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.04]"
+            ? "border-silver-400/70 bg-black/[0.05]"
+            : "border-black/[0.1] bg-black/[0.02] hover:border-black/25 hover:bg-black/[0.04]"
         }`}
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-ink-800 text-silver-300 transition-transform group-hover:scale-110">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-ink-800 text-silver-300 transition-transform group-hover:scale-110">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d="M12 3v13" strokeLinecap="round" />
             <path d="m7 8 5-5 5 5" strokeLinecap="round" strokeLinejoin="round" />
@@ -67,7 +67,7 @@ export function Uploader({ items, onAdd, onRemove }: Props) {
           {items.map((item) => (
             <li
               key={item.id}
-              className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-ink-800/60 px-4 py-2.5"
+              className="flex items-center justify-between gap-3 rounded-xl border border-black/[0.06] bg-ink-800/60 px-4 py-2.5"
             >
               <div className="flex min-w-0 items-center gap-3">
                 <span className="text-silver-400">♪</span>
@@ -77,7 +77,7 @@ export function Uploader({ items, onAdd, onRemove }: Props) {
                 <span className="text-xs text-silver-500">{formatBytes(item.file.size)}</span>
                 <button
                   onClick={() => onRemove(item.id)}
-                  className="text-silver-500 transition-colors hover:text-red-300"
+                  className="text-silver-500 transition-colors hover:text-red-600"
                   aria-label="移除"
                 >
                   ✕

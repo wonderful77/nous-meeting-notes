@@ -20,7 +20,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.06] bg-ink-900/50 p-5">
+    <section className="rounded-2xl border border-black/[0.06] bg-ink-900/50 p-5">
       <div className="mb-3 flex items-baseline gap-3">
         <h3 className="flex items-center gap-2 font-serif text-[17px] text-silver-100">
           <span className="text-accent">▌</span>
@@ -177,10 +177,10 @@ export function ResultEditor({ content, onChange }: Props) {
           {content.topics.map((topic, i) => (
             <div
               key={i}
-              className="rounded-xl border border-white/[0.06] bg-ink-800/50 p-3"
+              className="rounded-xl border border-black/[0.06] bg-ink-800/50 p-3"
             >
               <div className="mb-2 flex gap-2">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-sm text-silver-200">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-silver-100 text-sm text-ink-950">
                   {i + 1}
                 </span>
                 <input
@@ -239,7 +239,7 @@ export function ResultEditor({ content, onChange }: Props) {
         <div className="space-y-2">
           {content.todos.map((todo, i) => (
             <div key={i} className="flex gap-2">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-sm text-silver-200">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-silver-100 text-sm text-ink-950">
                 {i + 1}
               </span>
               <input

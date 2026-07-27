@@ -1,41 +1,13 @@
-import { useRef } from "react";
 import { Logo } from "./Logo";
 
 /**
- * 主視覺：黑白簽名漸層編輯風。
- * — 各向異性光十字（signature flare）＋顆粒質感
- * — 滑鼠視差僅位移 transform（避免版面重排）
- * — 角落十字標記與底部規格條，呼應 grid-system 編輯排版
+ * 主視覺：淺灰編輯風（Swiss）。
+ * — 柔和灰階漸層、無背景十字、細顆粒質感
+ * — 角落十字標記與底部規格條，呼應 grid-system 排版
  */
 export function Hero() {
-  const flareRef = useRef<HTMLDivElement>(null);
-
-  const onMove = (e: React.MouseEvent<HTMLElement>) => {
-    const el = flareRef.current;
-    if (!el) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `translate3d(${px * 26}px, ${py * 20}px, 0) scale(1.08)`;
-  };
-
-  const onLeave = () => {
-    if (flareRef.current)
-      flareRef.current.style.transform = "translate3d(0,0,0) scale(1)";
-  };
-
   return (
-    <section
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className="grain animate-fade-up relative isolate overflow-hidden rounded-[26px] border border-white/[0.07] shadow-glow"
-    >
-      {/* 簽名漸層層（視差） */}
-      <div
-        ref={flareRef}
-        className="signature absolute inset-0 -z-10 transition-transform duration-500 ease-out will-change-transform"
-      />
-
+    <section className="signature grain animate-fade-up relative isolate overflow-hidden rounded-[26px] border border-black/[0.08] shadow-glow">
       {/* 角落十字標記 */}
       <span className="plus-mark absolute left-5 top-5">＋</span>
       <span className="plus-mark absolute right-5 top-5">＋</span>

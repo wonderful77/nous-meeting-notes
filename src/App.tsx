@@ -201,7 +201,7 @@ export default function App() {
   return (
     <div className="min-h-full pb-40">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-ink-950/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-black/[0.06] bg-ink-950/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-4">
           <div className="flex items-center gap-3">
             <Logo size={38} />
@@ -217,14 +217,14 @@ export default function App() {
           <div className="flex items-center gap-3">
             <span
               className={`hidden items-center gap-1.5 text-xs sm:flex ${
-                hasKeys.claude ? "text-silver-400" : "text-amber-300/80"
+                hasKeys.claude ? "text-silver-400" : "text-amber-600"
               }`}
             >
               <span
                 className={`h-1.5 w-1.5 rounded-full ${
                   hasKeys.claude && hasKeys.openai
-                    ? "bg-emerald-400"
-                    : "bg-amber-400"
+                    ? "bg-emerald-500"
+                    : "bg-amber-500"
                 }`}
               />
               {hasKeys.claude && hasKeys.openai ? "金鑰已就緒" : "尚未設定金鑰"}
@@ -290,11 +290,11 @@ export default function App() {
       </main>
 
       {/* Sticky action bar */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.06] bg-ink-950/80 backdrop-blur-xl">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/[0.06] bg-ink-950/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-4xl flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-h-[20px] text-sm">
             {error ? (
-              <span className="text-red-300">{error}</span>
+              <span className="text-red-600">{error}</span>
             ) : busy ? (
               <span className="flex items-center gap-2 text-silver-300">
                 <Spinner />

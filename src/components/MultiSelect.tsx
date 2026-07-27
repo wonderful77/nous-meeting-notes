@@ -50,7 +50,7 @@ export function MultiSelect({
             >
               <span
                 className={`inline-block h-1.5 w-1.5 rounded-full transition-colors ${
-                  on ? "bg-accent-glow" : "bg-silver-500/40"
+                  on ? "bg-ink-950" : "bg-silver-500/40"
                 }`}
               />
               {name}

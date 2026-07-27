@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html,
@@ -16,25 +16,25 @@
   body {
     @apply bg-ink-950 text-silver-200 font-sans antialiased;
     background-image:
-      radial-gradient(1200px 600px at 80% -10%, rgba(201, 204, 212, 0.06), transparent 60%),
-      radial-gradient(900px 500px at 0% 110%, rgba(114, 122, 139, 0.08), transparent 55%);
+      radial-gradient(1200px 640px at 82% -12%, rgba(0, 0, 0, 0.05), transparent 60%),
+      radial-gradient(900px 520px at -5% 108%, rgba(0, 0, 0, 0.04), transparent 55%);
     background-attachment: fixed;
   }
 
   ::selection {
-    background: rgba(201, 204, 212, 0.25);
+    background: rgba(22, 24, 29, 0.16);
   }
 
-  /* 隱藏 number input 的上下箭頭，維持乾淨版面 */
   input[type="time"]::-webkit-calendar-picker-indicator,
   input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7);
+    filter: none;
+    opacity: 0.55;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-ink-900/70 border border-white/[0.06] backdrop-blur-xl;
+    @apply bg-ink-900/80 border border-black/[0.08] backdrop-blur-xl;
   }
 
   .field-label {
@@ -42,9 +42,9 @@
   }
 
   .field-input {
-    @apply w-full rounded-xl border border-white/[0.08] bg-ink-800/80 px-4 py-3 text-[15px] text-silver-100
-      outline-none transition-all duration-200 placeholder:text-silver-500/60
-      focus:border-accent/40 focus:bg-ink-800 focus:shadow-[0_0_0_3px_rgba(201,204,212,0.08)];
+    @apply w-full rounded-xl border border-black/[0.1] bg-ink-800 px-4 py-3 text-[15px] text-silver-100
+      outline-none transition-all duration-200 placeholder:text-silver-500/70
+      focus:border-silver-400/60 focus:bg-white focus:shadow-[0_0_0_3px_rgba(22,24,29,0.06)];
   }
 
   .btn {
@@ -53,14 +53,14 @@
   }
 
   .btn-primary {
-    @apply btn bg-gradient-to-b from-silver-100 to-silver-300 text-ink-950
-      hover:from-white hover:to-silver-200 hover:shadow-[0_12px_30px_-8px_rgba(201,204,212,0.4)]
+    @apply btn bg-gradient-to-b from-silver-100 to-silver-200 text-ink-950
+      hover:from-black hover:to-silver-100 hover:shadow-[0_12px_30px_-10px_rgba(22,24,29,0.45)]
       active:scale-[0.98];
   }
 
   .btn-ghost {
-    @apply btn border border-white/[0.1] bg-white/[0.02] text-silver-200
-      hover:border-white/20 hover:bg-white/[0.05];
+    @apply btn border border-black/[0.12] bg-black/[0.02] text-silver-200
+      hover:border-black/25 hover:bg-black/[0.05];
   }
 
   .chip {
@@ -69,11 +69,11 @@
   }
 
   .chip-on {
-    @apply border-accent/50 bg-accent/15 text-silver-100 shadow-[0_0_0_1px_rgba(201,204,212,0.15)_inset];
+    @apply border-transparent bg-silver-100 text-ink-950 shadow-[0_6px_16px_-8px_rgba(22,24,29,0.5)];
   }
 
   .chip-off {
-    @apply border-white/[0.08] bg-white/[0.02] text-silver-400 hover:border-white/20 hover:text-silver-200;
+    @apply border-black/[0.12] bg-black/[0.02] text-silver-400 hover:border-black/25 hover:text-silver-200;
   }
 
   /* ---- 編輯風系統：規格標籤 / 十字標記 / 髮絲線 ---- */
@@ -84,19 +84,17 @@
     @apply font-mono text-[11px] tracking-[0.06em] text-silver-200;
   }
   .hairline {
-    @apply h-px w-full bg-white/[0.08];
+    @apply h-px w-full bg-black/[0.1];
   }
 }
 
 @layer utilities {
-  /* Lux 簽名漸層：黑白各向異性光十字（anamorphic flare） */
+  /* Lux 淺灰簽名漸層（無十字） */
   .signature {
     background:
-      radial-gradient(72% 9% at 50% 50%, rgba(255, 255, 255, 0.28), transparent 72%),
-      radial-gradient(9% 66% at 50% 50%, rgba(255, 255, 255, 0.2), transparent 72%),
-      radial-gradient(40% 36% at 50% 50%, rgba(255, 255, 255, 0.14), transparent 70%),
-      radial-gradient(120% 120% at 88% 12%, rgba(255, 255, 255, 0.06), transparent 55%),
-      linear-gradient(155deg, #191b22 0%, #0b0c11 58%, #050609 100%);
+      radial-gradient(130% 120% at 84% 8%, rgba(255, 255, 255, 0.7), transparent 55%),
+      radial-gradient(120% 130% at 12% 100%, rgba(0, 0, 0, 0.06), transparent 55%),
+      linear-gradient(158deg, #eceded 0%, #dfe0e2 52%, #d2d3d6 100%);
   }
 
   /* 顆粒質感 */
@@ -105,29 +103,29 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
+    opacity: 0.28;
+    mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   .plus-mark {
-    @apply select-none font-mono text-sm leading-none text-silver-500/50;
+    @apply select-none font-mono text-sm leading-none text-silver-500/60;
   }
 }
 
 /* 細緻捲軸 */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(201, 204, 212, 0.15) transparent;
+  scrollbar-color: rgba(22, 24, 29, 0.18) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: rgba(201, 204, 212, 0.15);
+  background: rgba(22, 24, 29, 0.18);
   border-radius: 999px;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(201, 204, 212, 0.3);
+  background: rgba(22, 24, 29, 0.32);
 }
