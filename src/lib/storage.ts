@@ -6,8 +6,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   openaiKey: "",
   claudeKey: "",
   whisperModel: "whisper-1",
-  // 若金鑰對應較新模型，可在設定頁自行更換
-  claudeModel: "claude-3-5-sonnet-latest",
+  // 預設僅供參考；模型名稱會隨版本淘汰，請在設定頁按「載入可用模型」取得目前可用清單
+  claudeModel: "claude-sonnet-4-5",
   language: "zh",
 };
 

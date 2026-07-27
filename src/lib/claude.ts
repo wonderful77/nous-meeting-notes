@@ -3,6 +3,36 @@ import { SYSTEM_PROMPT, buildUserMessage } from "./prompt";
 import { formatDateChinese, formatTimeRange } from "./format";
 
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
+const ANTHROPIC_MODELS_URL = "https://api.anthropic.com/v1/models?limit=100";
+
+export interface ClaudeModel {
+  id: string;
+  displayName: string;
+}
+
+/** 用金鑰查詢此帳號目前可用的 Claude 模型清單 */
+export async function listModels(apiKey: string): Promise<ClaudeModel[]> {
+  const res = await fetch(ANTHROPIC_MODELS_URL, {
+    method: "GET",
+    headers: {
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
+    },
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(`載入模型清單失敗（HTTP ${res.status}）：${detail.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  const models: ClaudeModel[] = (data?.data ?? []).map(
+    (m: { id: string; display_name?: string }) => ({
+      id: m.id,
+      displayName: m.display_name || m.id,
+    })
+  );
+  return models;
+}
 
 interface ClaudeExtract {
   client?: Partial<MeetingContent["client"]>;

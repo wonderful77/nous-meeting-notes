@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { AppSettings } from "../types";
+import { listModels, type ClaudeModel } from "../lib/claude";
 
 interface Props {
   settings: AppSettings;
@@ -11,8 +12,33 @@ export function Settings({ settings, onSave, onClose }: Props) {
   const [draft, setDraft] = useState<AppSettings>(settings);
   const [showKeys, setShowKeys] = useState(false);
 
+  const [models, setModels] = useState<ClaudeModel[]>([]);
+  const [loadingModels, setLoadingModels] = useState(false);
+  const [modelError, setModelError] = useState("");
+
   const set = <K extends keyof AppSettings>(k: K, v: AppSettings[K]) =>
     setDraft((d) => ({ ...d, [k]: v }));
+
+  const loadModels = async () => {
+    setModelError("");
+    if (!draft.claudeKey.trim()) {
+      setModelError("請先填入 Claude API Key。");
+      return;
+    }
+    setLoadingModels(true);
+    try {
+      const list = await listModels(draft.claudeKey.trim());
+      setModels(list);
+      // 若目前模型不在清單內，自動選第一個（最新）
+      if (list.length && !list.some((m) => m.id === draft.claudeModel)) {
+        set("claudeModel", list[0].id);
+      }
+    } catch (e) {
+      setModelError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoadingModels(false);
+    }
+  };
 
   return (
     <div
@@ -86,15 +112,51 @@ export function Settings({ settings, onSave, onClose }: Props) {
           </div>
 
           <div>
-            <label className="field-label">Claude 模型</label>
-            <input
-              value={draft.claudeModel}
-              onChange={(e) => set("claudeModel", e.target.value)}
-              className="field-input text-sm"
-            />
-            <p className="mt-1.5 text-xs text-silver-500">
-              若你的金鑰對應較新版本，可改為 claude-sonnet-4-5 等最新模型名稱。
-            </p>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <label className="field-label mb-0">Claude 模型</label>
+              <button
+                type="button"
+                onClick={loadModels}
+                disabled={loadingModels}
+                className="btn-ghost px-3 py-1.5 text-xs"
+              >
+                {loadingModels ? "載入中…" : "載入可用模型"}
+              </button>
+            </div>
+
+            {models.length > 0 ? (
+              <select
+                value={draft.claudeModel}
+                onChange={(e) => set("claudeModel", e.target.value)}
+                className="field-input text-sm"
+              >
+                {/* 若當前值不在清單，仍保留可見 */}
+                {!models.some((m) => m.id === draft.claudeModel) && (
+                  <option value={draft.claudeModel}>
+                    {draft.claudeModel}（目前設定）
+                  </option>
+                )}
+                {models.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.displayName}（{m.id}）
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                value={draft.claudeModel}
+                onChange={(e) => set("claudeModel", e.target.value)}
+                className="field-input text-sm"
+              />
+            )}
+
+            {modelError ? (
+              <p className="mt-1.5 text-xs text-red-600">{modelError}</p>
+            ) : (
+              <p className="mt-1.5 text-xs text-silver-500">
+                模型名稱若過時會回報 404。點「載入可用模型」直接從你的金鑰取得目前可用清單再選取。
+              </p>
+            )}
           </div>
         </div>
 
