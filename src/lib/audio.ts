@@ -1,10 +1,9 @@
 // 音檔前處理：解碼 → 降頻為 16kHz 單聲道 → 依時間切成多段 WAV。
-// 每段需經 Vercel 後端代理轉送，Hobby 方案單次請求 body 上限約 4.5MB；
-// 16kHz/16-bit/mono 每秒約 32KB，故以 90 秒為一段（約 2.9MB）安全落在上限內，
-// 並支援任意長度的會議音檔。
+// 瀏覽器直接呼叫 Whisper API，單檔上限 25MB；16kHz/16-bit/mono 每分鐘約 1.9MB，
+// 以 ~8 分鐘為一段可穩定落在上限內，並支援任意長度的會議音檔。
 
 const TARGET_SAMPLE_RATE = 16000;
-const CHUNK_SECONDS = 90;
+const CHUNK_SECONDS = 8 * 60;
 
 export interface AudioChunk {
   blob: Blob;

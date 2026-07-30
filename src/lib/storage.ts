@@ -2,8 +2,10 @@ import type { AppSettings } from "../types";
 
 const KEY = "yijilu.settings.v1";
 
-// 金鑰不再放前端；由 Vercel 後端代理（環境變數）處理。
+// 金鑰由使用者於「設定」手動輸入，僅存於此瀏覽器 localStorage，不進 repo。
 export const DEFAULT_SETTINGS: AppSettings = {
+  openaiKey: "",
+  claudeKey: "",
   whisperModel: "whisper-1",
   claudeModel: "claude-sonnet-4-6",
   language: "zh",

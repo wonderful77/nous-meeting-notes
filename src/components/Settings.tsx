@@ -10,6 +10,7 @@ interface Props {
 
 export function Settings({ settings, onSave, onClose }: Props) {
   const [draft, setDraft] = useState<AppSettings>(settings);
+  const [showKeys, setShowKeys] = useState(false);
 
   const [models, setModels] = useState<ClaudeModel[]>([]);
   const [loadingModels, setLoadingModels] = useState(false);
@@ -20,9 +21,13 @@ export function Settings({ settings, onSave, onClose }: Props) {
 
   const loadModels = async () => {
     setModelError("");
+    if (!draft.claudeKey.trim()) {
+      setModelError("請先填入 Claude API Key。");
+      return;
+    }
     setLoadingModels(true);
     try {
-      const list = await listModels();
+      const list = await listModels(draft.claudeKey.trim());
       setModels(list);
       // 若目前模型不在清單內，自動選第一個（最新）
       if (list.length && !list.some((m) => m.id === draft.claudeModel)) {
@@ -45,16 +50,46 @@ export function Settings({ settings, onSave, onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="font-serif text-xl text-silver-100">模型設定</h2>
+          <h2 className="font-serif text-xl text-silver-100">API 設定</h2>
           <button onClick={onClose} className="text-silver-500 hover:text-silver-200">
             ✕
           </button>
         </div>
 
         <div className="space-y-5">
-          <div className="rounded-xl border border-black/[0.08] bg-black/[0.02] p-4 text-xs leading-relaxed text-silver-400">
-            金鑰由後端代理（Vercel 環境變數）持有，不再存於瀏覽器，也不會出現在網頁原始碼中。
+          <div>
+            <label className="field-label">OpenAI API Key（Whisper 語音轉文字）</label>
+            <input
+              type={showKeys ? "text" : "password"}
+              value={draft.openaiKey}
+              onChange={(e) => set("openaiKey", e.target.value)}
+              placeholder="sk-..."
+              className="field-input font-mono text-sm"
+              autoComplete="off"
+            />
           </div>
+
+          <div>
+            <label className="field-label">Claude API Key（會議記錄整理）</label>
+            <input
+              type={showKeys ? "text" : "password"}
+              value={draft.claudeKey}
+              onChange={(e) => set("claudeKey", e.target.value)}
+              placeholder="sk-ant-..."
+              className="field-input font-mono text-sm"
+              autoComplete="off"
+            />
+          </div>
+
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-silver-400">
+            <input
+              type="checkbox"
+              checked={showKeys}
+              onChange={(e) => setShowKeys(e.target.checked)}
+              className="accent-silver-200"
+            />
+            顯示金鑰
+          </label>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -127,7 +162,7 @@ export function Settings({ settings, onSave, onClose }: Props) {
 
         <div className="mt-7 flex items-center justify-between gap-3">
           <p className="text-xs text-silver-500">
-            模型偏好僅存於此瀏覽器 localStorage。
+            金鑰僅存於此瀏覽器 localStorage，不會上傳伺服器。
           </p>
           <button
             className="btn-primary"
