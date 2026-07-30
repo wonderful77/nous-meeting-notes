@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type {
   AppSettings,
   AudioItem,
@@ -59,14 +59,6 @@ export default function App() {
     saveDraft(meta);
   }, [meta]);
 
-  const hasKeys = useMemo(
-    () => ({
-      openai: settings.openaiKey.trim().length > 0,
-      claude: settings.claudeKey.trim().length > 0,
-    }),
-    [settings]
-  );
-
   const busy = phase === "decoding" || phase === "transcribing" || phase === "analyzing";
 
   const addAudio = (files: File[]) =>
@@ -92,16 +84,6 @@ export default function App() {
   /** 完整流程：轉錄 → Claude 整理 */
   const runPipeline = async () => {
     setError("");
-    if (!hasKeys.claude) {
-      setError("尚未設定 Claude API Key，請先到右上角「設定」填入。");
-      setShowSettings(true);
-      return;
-    }
-    if (audio.length > 0 && !hasKeys.openai) {
-      setError("有語音檔但尚未設定 OpenAI API Key（Whisper 轉錄需要）。");
-      setShowSettings(true);
-      return;
-    }
     if (audio.length === 0 && !meta.notes.trim() && !transcript.trim()) {
       setError("請至少上傳語音檔，或在筆記欄輸入內容。");
       return;
@@ -121,7 +103,6 @@ export default function App() {
           const text = await transcribeFile(
             audio[i].file,
             {
-              apiKey: settings.openaiKey.trim(),
               model: settings.whisperModel,
               language: settings.language,
             },
@@ -136,7 +117,6 @@ export default function App() {
       setPhase("analyzing");
       setStatus("Claude 正在依公版原則整理會議記錄…");
       const result = await analyzeMeeting(meta, fullTranscript, {
-        apiKey: settings.claudeKey.trim(),
         model: settings.claudeModel,
       });
       setContent(result);
@@ -158,15 +138,10 @@ export default function App() {
   /** 只重新跑 Claude（編輯逐字稿或筆記後） */
   const reanalyze = async () => {
     setError("");
-    if (!hasKeys.claude) {
-      setShowSettings(true);
-      return;
-    }
     try {
       setPhase("analyzing");
       setStatus("重新整理中…");
       const result = await analyzeMeeting(meta, transcript, {
-        apiKey: settings.claudeKey.trim(),
         model: settings.claudeModel,
       });
       setContent(result);
@@ -215,19 +190,9 @@ export default function App() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span
-              className={`hidden items-center gap-1.5 text-xs sm:flex ${
-                hasKeys.claude ? "text-silver-400" : "text-amber-600"
-              }`}
-            >
-              <span
-                className={`h-1.5 w-1.5 rounded-full ${
-                  hasKeys.claude && hasKeys.openai
-                    ? "bg-emerald-500"
-                    : "bg-amber-500"
-                }`}
-              />
-              {hasKeys.claude && hasKeys.openai ? "金鑰已就緒" : "尚未設定金鑰"}
+            <span className="hidden items-center gap-1.5 text-xs text-silver-400 sm:flex">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              後端代理
             </span>
             <button onClick={() => setShowSettings(true)} className="btn-ghost py-2">
               設定

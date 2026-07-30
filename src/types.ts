@@ -50,8 +50,7 @@ export interface MeetingContent {
 }
 
 export interface AppSettings {
-  openaiKey: string;
-  claudeKey: string;
+  // 金鑰改由後端代理（Vercel 環境變數）持有，前端不再保存金鑰
   whisperModel: string;
   claudeModel: string;
   language: string; // whisper 語言提示

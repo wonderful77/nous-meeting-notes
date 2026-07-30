@@ -2,13 +2,8 @@ import type { AppSettings } from "../types";
 
 const KEY = "yijilu.settings.v1";
 
-// 內嵌金鑰：純個人使用，額度有限、外流可接受（使用者明確同意）。
-// 仍可在設定頁覆蓋為自己的金鑰。
+// 金鑰不再放前端；由 Vercel 後端代理（環境變數）處理。
 export const DEFAULT_SETTINGS: AppSettings = {
-  openaiKey:
-    "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",
-  claudeKey:
-    "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",
   whisperModel: "whisper-1",
   claudeModel: "claude-sonnet-4-6",
   language: "zh",

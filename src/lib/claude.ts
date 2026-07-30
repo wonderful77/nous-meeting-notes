@@ -2,24 +2,18 @@ import type { MeetingContent, MeetingMeta } from "../types";
 import { SYSTEM_PROMPT, buildUserMessage } from "./prompt";
 import { formatDateChinese, formatTimeRange } from "./format";
 
-const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
-const ANTHROPIC_MODELS_URL = "https://api.anthropic.com/v1/models?limit=100";
+// 走同源後端代理，金鑰由 Vercel 環境變數持有
+const ANALYZE_URL = "/api/analyze";
+const MODELS_URL = "/api/models";
 
 export interface ClaudeModel {
   id: string;
   displayName: string;
 }
 
-/** 用金鑰查詢此帳號目前可用的 Claude 模型清單 */
-export async function listModels(apiKey: string): Promise<ClaudeModel[]> {
-  const res = await fetch(ANTHROPIC_MODELS_URL, {
-    method: "GET",
-    headers: {
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true",
-    },
-  });
+/** 查詢帳號目前可用的 Claude 模型清單（透過後端代理） */
+export async function listModels(): Promise<ClaudeModel[]> {
+  const res = await fetch(MODELS_URL, { method: "GET" });
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
     throw new Error(`載入模型清單失敗（HTTP ${res.status}）：${detail.slice(0, 200)}`);
@@ -69,19 +63,13 @@ function buildAttendees(meta: MeetingMeta): [string, string][] {
 export async function analyzeMeeting(
   meta: MeetingMeta,
   transcript: string,
-  opts: { apiKey: string; model: string }
+  opts: { model: string }
 ): Promise<MeetingContent> {
   const userMsg = buildUserMessage(meta, transcript, meta.notes);
 
-  const res = await fetch(ANTHROPIC_URL, {
+  const res = await fetch(ANALYZE_URL, {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-api-key": opts.apiKey,
-      "anthropic-version": "2023-06-01",
-      // 允許瀏覽器端直呼 Anthropic API
-      "anthropic-dangerous-direct-browser-access": "true",
-    },
+    headers: { "content-type": "application/json" },
     body: JSON.stringify({
       model: opts.model,
       max_tokens: 4096,

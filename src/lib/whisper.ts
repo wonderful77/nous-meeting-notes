@@ -7,29 +7,21 @@ export interface TranscribeProgress {
   chunkTotal: number;
 }
 
-const OPENAI_URL = "https://api.openai.com/v1/audio/transcriptions";
+// 走同源後端代理，金鑰由 Vercel 環境變數持有
+const PROXY_URL = "/api/transcribe";
 
 async function transcribeChunk(
   chunk: AudioChunk,
-  apiKey: string,
   model: string,
   language: string
 ): Promise<string> {
-  const form = new FormData();
-  form.append("file", chunk.blob, `chunk-${chunk.index}.wav`);
-  form.append("model", model);
-  if (language) form.append("language", language);
-  form.append("response_format", "text");
-  // 提示模型這是中文會議，提升專有名詞/口語辨識
-  form.append(
-    "prompt",
-    "這是一段中文會議錄音，內容包含影視製作、腳本、拍攝、造型、時程與分工討論。"
-  );
+  const params = new URLSearchParams({ model });
+  if (language) params.set("language", language);
 
-  const res = await fetch(OPENAI_URL, {
+  const res = await fetch(`${PROXY_URL}?${params.toString()}`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}` },
-    body: form,
+    headers: { "content-type": "audio/wav" },
+    body: chunk.blob,
   });
 
   if (!res.ok) {
@@ -44,7 +36,7 @@ async function transcribeChunk(
 /** 轉錄單一檔案（自動分段、逐段串接） */
 export async function transcribeFile(
   file: File,
-  opts: { apiKey: string; model: string; language: string },
+  opts: { model: string; language: string },
   onProgress?: (p: TranscribeProgress) => void
 ): Promise<string> {
   onProgress?.({
@@ -63,12 +55,7 @@ export async function transcribeFile(
       chunkIndex: chunk.index + 1,
       chunkTotal: chunk.total,
     });
-    const text = await transcribeChunk(
-      chunk,
-      opts.apiKey,
-      opts.model,
-      opts.language
-    );
+    const text = await transcribeChunk(chunk, opts.model, opts.language);
     if (text) parts.push(text);
   }
   return parts.join("\n");
